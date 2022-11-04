@@ -1,3 +1,5 @@
+TEST_ENV_VARS:=$(shell cat .env.test | xargs)
+
 venv:
 	python3.10 -m venv venv
 	venv/bin/pip install -r requirements.txt
@@ -22,7 +24,7 @@ migrate:
 
 tests: venv
 	venv/bin/pip install -r requirements-tests.txt
-	PYTHONPATH=src venv/bin/pytest src/tests
+	$(TEST_ENV_VARS) PYTHONPATH=src venv/bin/pytest src/tests
 
 run/local: venv
 	PYTHONPATH=src venv/bin/python src/manage.py runserver
