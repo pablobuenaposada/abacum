@@ -6,10 +6,13 @@ from transaction.validators import validate_amount
 class Account(models.Model):
     id = models.PositiveIntegerField(primary_key=True, null=False, blank=False)
 
-    @property
-    def balance(self):
+    def balance(self, year=None):
         balance = 0
-        for transaction in self.transaction_set.all():
+        for transaction in (
+            self.transaction_set.filter(created__year=year)
+            if year is not None
+            else self.transaction_set.all()
+        ):
             balance += transaction.amount
         return balance
 
