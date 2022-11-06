@@ -1,3 +1,4 @@
 Django==4.1
+djangorestframework==3.14.0
 django-extensions==3.2.1
 pandas==1.5.1

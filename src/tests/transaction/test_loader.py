@@ -15,7 +15,7 @@ class TestLoader:
         assert Account.objects.count() == 0
         assert Transaction.objects.count() == 0
 
-        Loader(Path("src/tests/transaction/fixtures/valid.csv"))
+        Loader().load(Path("src/tests/transaction/fixtures/valid.csv"))
 
         assert Account.objects.count() == 1
         assert Transaction.objects.count() == 1
@@ -43,7 +43,7 @@ class TestLoader:
         assert Account.objects.count() == 0
         assert Transaction.objects.count() == 0
 
-        Loader(Path("src/tests/transaction/fixtures/duplicate_account.csv"))
+        Loader().load(Path("src/tests/transaction/fixtures/duplicate_account.csv"))
 
         assert Account.objects.count() == 1
         assert Transaction.objects.count() == 2
@@ -57,11 +57,11 @@ class TestLoader:
         assert Transaction.objects.count() == 0
 
         with pytest.raises(Exception):
-            Loader(Path("src/tests/transaction/fixtures/invalid.csv"))
+            Loader().load(Path("src/tests/transaction/fixtures/invalid.csv"))
 
         assert Account.objects.count() == 0
         assert Transaction.objects.count() == 0
 
     def test_csv_not_found(self):
         with pytest.raises(FileNotFoundError):
-            Loader(Path("src/tests/transaction/fixtures/fake.csv"))
+            Loader().load(Path("src/tests/transaction/fixtures/fake.csv"))

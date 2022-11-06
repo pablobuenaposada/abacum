@@ -10,4 +10,4 @@ class Command(BaseCommand):
         parser.add_argument("file", type=Path)
 
     def handle(self, *args, **options):
-        Loader(Path(options["file"]))
+        Loader().load(Path(options["file"]))
