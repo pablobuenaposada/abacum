@@ -1,4 +1,7 @@
+from datetime import datetime
+
 import pandas as pd
+import pytz
 from django.db import transaction
 
 from transaction.models import Account, Transaction
@@ -15,8 +18,10 @@ class Loader:
         for _, row in row_iter:
             account = Account(id=row["Account"])
             account_instances.append(account)
+            unaware_time = datetime.strptime(row["Date"], "%Y-%m-%d")
+            aware_time = unaware_time.replace(tzinfo=pytz.UTC)
             transaction_instances.append(
-                Transaction(account=account, amount=row["Amount"], created=row["Date"])
+                Transaction(account=account, amount=row["Amount"], created=aware_time)
             )
 
         Account.objects.bulk_create(account_instances, ignore_conflicts=True)

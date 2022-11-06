@@ -37,6 +37,9 @@ class TestLoader:
             )
 
     def test_duplicate_account(self):
+        """
+        Accounts cannot be duplicated, the csv may contain references to the same account multiple times
+        """
         assert Account.objects.count() == 0
         assert Transaction.objects.count() == 0
 
@@ -58,3 +61,7 @@ class TestLoader:
 
         assert Account.objects.count() == 0
         assert Transaction.objects.count() == 0
+
+    def test_csv_not_found(self):
+        with pytest.raises(FileNotFoundError):
+            Loader(Path("src/tests/transaction/fixtures/fake.csv"))
