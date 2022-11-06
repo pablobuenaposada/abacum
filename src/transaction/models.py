@@ -6,6 +6,13 @@ from transaction.validators import validate_amount
 class Account(models.Model):
     id = models.PositiveIntegerField(primary_key=True, null=False, blank=False)
 
+    @property
+    def balance(self):
+        balance = 0
+        for transaction in self.transaction_set.all():
+            balance += transaction.amount
+        return balance
+
 
 class Transaction(models.Model):
     created = models.DateTimeField()
