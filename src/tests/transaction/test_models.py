@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
@@ -36,14 +38,13 @@ class TestAccount:
 class TestTransaction:
     def test_valid(self):
         account = baker.make(Account)
-        data = {"account": account, "amount": 1}
+        data = {"account": account, "amount": 1, "created": datetime(2022, 1, 1)}
         transaction = Transaction.objects.create(**data)
         expected = {
             "id": transaction.id,
             "account": account,
             "amount": data["amount"],
             "created": transaction.created,
-            "modified": transaction.modified,
         }
 
         for field in {field.name for field in Transaction._meta.get_fields()}:
@@ -55,7 +56,7 @@ class TestTransaction:
 
         assert (
             str(error.value)
-            == "NOT NULL constraint failed: transaction_transaction.account_id"
+            == "NOT NULL constraint failed: transaction_transaction.amount"
         )
 
     def test_amount(self):
