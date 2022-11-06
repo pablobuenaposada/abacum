@@ -15,8 +15,15 @@ class AccountOutputSerializer(serializers.ModelSerializer):
             year = self.context["request"].query_params.get("year", None)
         except KeyError:
             year = None
-        return obj.balance(year)
+
+        try:
+            month = self.context["request"].query_params.get("month", None)
+        except KeyError:
+            month = None
+
+        return obj.balance(year, month)
 
 
 class AccountInputSerializer(serializers.Serializer):
     year = serializers.IntegerField(required=False)
+    month = serializers.IntegerField(required=False, min_value=1, max_value=12)
