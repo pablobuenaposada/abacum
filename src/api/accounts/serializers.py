@@ -1,3 +1,5 @@
+from datetime import date
+
 from rest_framework import serializers
 
 from transaction.models import Account
@@ -24,6 +26,28 @@ class AccountOutputSerializer(serializers.ModelSerializer):
         return obj.balance(year, month)
 
 
+class AccountMonthlyOutputSerializer(serializers.ModelSerializer):
+    balance = serializers.SerializerMethodField()
+    date = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Account
+        fields = ["id", "balance", "date"]
+
+    def get_balance(self, obj):
+        year = self.context["request"].query_params.get("year")
+        return obj.balance(year, self.month)
+
+    def get_date(self, obj):
+        return date(
+            int(self.context["request"].query_params.get("year")), self.month, 1
+        ).strftime("%Y-%m")
+
+
 class AccountInputSerializer(serializers.Serializer):
     year = serializers.IntegerField(required=False)
     month = serializers.IntegerField(required=False, min_value=1, max_value=12)
+
+
+class AccountMonthlyInputSerializer(serializers.Serializer):
+    year = serializers.IntegerField(required=True)
