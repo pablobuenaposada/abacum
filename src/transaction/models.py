@@ -10,9 +10,9 @@ class Account(models.Model):
         balance = 0
         qs = self.transaction_set.all()
         if year is not None:
-            qs = qs.filter(created__year=year)
+            qs = qs.filter(created__year__lte=year)
         if month is not None:
-            qs = qs.filter(created__month=month)
+            qs = qs.filter(created__month__lte=month)
         for transaction in qs:
             balance += transaction.amount
         return balance
