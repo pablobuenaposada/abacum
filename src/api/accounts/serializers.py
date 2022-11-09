@@ -42,5 +42,5 @@ class AccountMonthlyOutputSerializer(serializers.ModelSerializer):
 
 
 class AccountInputSerializer(serializers.Serializer):
-    year = serializers.IntegerField(required=False)
+    year = serializers.IntegerField(required=True)
     month = serializers.IntegerField(required=False, min_value=1, max_value=12)
