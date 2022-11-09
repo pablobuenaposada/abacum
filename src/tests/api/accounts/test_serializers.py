@@ -71,6 +71,7 @@ class TestAccountInputSerializer:
         ],
     )
     def test_month(self, month, expected):
+        """Allowed months are from 1 to 12"""
         serializer = AccountInputSerializer(data={"year": 2022, "month": month})
 
         assert serializer.is_valid() is expected
