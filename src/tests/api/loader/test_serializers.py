@@ -1,4 +1,4 @@
-import tempfile
+from django.core.files.uploadedfile import TemporaryUploadedFile
 
 from api.loader.serializers import (FileUploadInputSerializer,
                                     FileUploadOutputSerializer)
@@ -6,9 +6,19 @@ from api.loader.serializers import (FileUploadInputSerializer,
 
 class TestFileUploadInputSerializer:
     def test_valid(self):
-        fp = tempfile.NamedTemporaryFile(suffix=".csv")
-        serializer = FileUploadInputSerializer(data={"file": fp})
-        serializer.is_valid(raise_exception=True)
+        file = TemporaryUploadedFile("foo", None, 1, None)
+        serializer = FileUploadInputSerializer(data={"file": file})
+
+        assert serializer.is_valid() is True
+
+    def test_available_fields(self):
+        assert set(dict(FileUploadInputSerializer().fields).keys()) == {"file"}
+
+    def test_mandatory_fields(self):
+        serializer = FileUploadInputSerializer(data={})
+
+        assert serializer.is_valid() is False
+        assert serializer.errors.keys() == {"file"}
 
 
 class TestFileUploadOutputSerializer:
