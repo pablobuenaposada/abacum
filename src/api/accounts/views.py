@@ -12,14 +12,16 @@ class AccountView(ReadOnlyModelViewSet):
     input_serializer = AccountInputSerializer
     queryset = Account.objects.all()
 
-    def retrieve(self, request, *args, **kwargs):
+    def _validate_params(self, request):
         input_serializer = self.input_serializer(data=request.query_params)
         input_serializer.is_valid(raise_exception=True)
+
+    def retrieve(self, request, *args, **kwargs):
+        self._validate_params(request)
         return super().retrieve(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
-        input_serializer = self.input_serializer(data=request.query_params)
-        input_serializer.is_valid(raise_exception=True)
+        self._validate_params(request)
         return super().list(request, *args, **kwargs)
 
 

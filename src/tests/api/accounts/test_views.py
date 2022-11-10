@@ -1,13 +1,18 @@
-from django.test import TestCase
+import pytest
 from model_bakery import baker
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
+from rest_framework.test import APIClient
 
 from transaction.models import Transaction
 
 
-class TestAccountViewList(TestCase):
+@pytest.mark.django_db
+class TestAccountViewList:
     endpoint = "/api/accounts/"
+
+    def setup_class(self):
+        self.client = APIClient()
 
     def test_valid_only_year(self):
         transaction = baker.make(Transaction)
@@ -44,9 +49,27 @@ class TestAccountViewList(TestCase):
             ],
         }
 
+    @pytest.mark.parametrize(
+        "query_params, error",
+        [
+            ({}, {"year"}),
+            ({"month": 1}, {"year"}),
+        ],
+    )
+    def test_invalid_query_params(self, query_params, error):
+        client = APIClient()
+        response = client.get(self.endpoint, data=query_params)
 
-class TestAccountViewDetail(TestCase):
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data.keys() == error
+
+
+@pytest.mark.django_db
+class TestAccountViewDetail:
     endpoint = "/api/accounts/"
+
+    def setup_class(self):
+        self.client = APIClient()
 
     def test_valid_only_year(self):
         transaction = baker.make(Transaction)
@@ -84,9 +107,27 @@ class TestAccountViewDetail(TestCase):
             "detail": ErrorDetail(string="Not found.", code="not_found")
         }
 
+    @pytest.mark.parametrize(
+        "query_params, error",
+        [
+            ({}, {"year"}),
+            ({"month": 1}, {"year"}),
+        ],
+    )
+    def test_invalid_query_params(self, query_params, error):
+        client = APIClient()
+        response = client.get(self.endpoint, data=query_params)
 
-class TestAccountMonthlyViewList(TestCase):
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data.keys() == error
+
+
+@pytest.mark.django_db
+class TestAccountMonthlyViewList:
     endpoint = "/api/accounts/monthly/"
+
+    def setup_class(self):
+        self.client = APIClient()
 
     def test_valid(self):
         transactions = baker.make(Transaction, created="2022-01-01", _quantity=2)
@@ -107,8 +148,12 @@ class TestAccountMonthlyViewList(TestCase):
         assert response.data == expected
 
 
-class TestAccountMonthlyViewDetail(TestCase):
+@pytest.mark.django_db
+class TestAccountMonthlyViewDetail:
     endpoint = "/api/accounts/monthly/"
+
+    def setup_class(self):
+        self.client = APIClient()
 
     def test_valid(self):
         transaction = baker.make(Transaction, created="2022-01-01")
