@@ -29,12 +29,7 @@ class AccountMonthlyView(ReadOnlyModelViewSet):
     serializer_class = AccountMonthlyOutputSerializer
     queryset = Account.objects.all()
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        years = [
-            date.year for date in instance.transaction_set.dates("created", "year")
-        ]
-
+    def _get_account_monthly_balance(self, years, instance):
         results = []
         for year in years:
             for month in range(1, 13):
@@ -42,8 +37,12 @@ class AccountMonthlyView(ReadOnlyModelViewSet):
                 serializer.year = year
                 serializer.month = month
                 results.append(serializer.data)
+        return results
 
-        return Response(results)
+    def retrieve(self, request, *args, **kwargs):
+        account = self.get_object()
+        years = [date.year for date in account.transaction_set.dates("created", "year")]
+        return Response(self._get_account_monthly_balance(years, account))
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -54,11 +53,5 @@ class AccountMonthlyView(ReadOnlyModelViewSet):
             years = [
                 date.year for date in account.transaction_set.dates("created", "year")
             ]
-            for year in years:
-                for month in range(1, 13):
-                    serializer = self.get_serializer(account)
-                    serializer.year = year
-                    serializer.month = month
-                    results.append(serializer.data)
-
+            results.extend(self._get_account_monthly_balance(years, account))
         return Response(results)
