@@ -12,6 +12,8 @@ class Loader:
     def load(self, csv_path):
         df = pd.read_csv(csv_path)
         row_iter = df.iterrows()
+        initial_num_accounts = Account.objects.count()
+        initial_num_transactions = Transaction.objects.count()
         account_instances = []
         transaction_instances = []
 
@@ -24,8 +26,13 @@ class Loader:
                 Transaction(account=account, amount=row["Amount"], created=aware_time)
             )
 
-        accounts_created = Account.objects.bulk_create(
-            account_instances, ignore_conflicts=True
-        )
+        Account.objects.bulk_create(account_instances, ignore_conflicts=True)
         transactions_created = Transaction.objects.bulk_create(transaction_instances)
-        return len(accounts_created), len(transactions_created)
+        final_num_accounts = Account.objects.count()
+        final_num_transactions = Transaction.objects.count()
+
+        assert (
+            len(transactions_created)
+            == final_num_transactions - initial_num_transactions
+        )
+        return final_num_accounts - initial_num_accounts, len(transactions_created)
