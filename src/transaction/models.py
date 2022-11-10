@@ -10,13 +10,15 @@ class Account(models.Model):
     def balance(self, year=None, month=None):
         if not year and month:
             raise ValidationError("balance for specific month needs also specific year")
+
         balance = 0
-        qs = self.transaction_set.all()
-        if year is not None:
+        qs = self.transaction_set.all()  # get all transactions by this account
+        if year:
             qs = qs.filter(created__year__lte=year)
-        if month is not None:
+        if month:
             qs = qs.filter(created__month__lte=month)
         for transaction in qs:
+            # add up all the chosen amounts
             balance += transaction.amount
         return balance
 

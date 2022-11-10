@@ -110,7 +110,7 @@ class TestAccount:
 
     def test_balance_error(self):
         """
-        If balance for specific month is asked year should be also defined
+        If balance for specific month is asked, year should be also defined
         """
         account = baker.make(Account)
         with pytest.raises(ValidationError) as error:
@@ -148,7 +148,9 @@ class TestTransaction:
         )
 
     def test_amount(self):
-        """transaction with amount 0 is not allowed"""
+        """
+        Transaction with amount 0 is not allowed
+        """
         with pytest.raises(ValidationError) as error:
             Transaction.objects.create(account=baker.make(Account), amount=0)
 
