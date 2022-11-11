@@ -1,5 +1,107 @@
-# abacum
+# Abacum
 
+## Setup
+To have the project running you need to execute the following commands:
+```
+make docker/build
+make docker/run
+```
+
+## Run the tests
+```
+pablobuenaposadasanchez@Pablos-MacBook-Pro abacum % make docker/tests
+docker run abacum /bin/sh -c 'make tests'
+venv/bin/pip install -r requirements-tests.txt
+Collecting pytest
+  Downloading pytest-7.2.0-py3-none-any.whl (316 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 316.8/316.8 KB 5.8 MB/s eta 0:00:00
+Collecting pytest-django
+  Downloading pytest_django-4.5.2-py3-none-any.whl (20 kB)
+Collecting black
+  Downloading black-22.10.0-py3-none-any.whl (165 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 165.8/165.8 KB 26.7 MB/s eta 0:00:00
+Collecting isort
+  Downloading isort-5.10.1-py3-none-any.whl (103 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 103.4/103.4 KB 25.6 MB/s eta 0:00:00
+Collecting flake8
+  Downloading flake8-5.0.4-py2.py3-none-any.whl (61 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 61.9/61.9 KB 31.9 MB/s eta 0:00:00
+Collecting model-bakery
+  Downloading model_bakery-1.9.0-py2.py3-none-any.whl (22 kB)
+Collecting exceptiongroup>=1.0.0rc8
+  Downloading exceptiongroup-1.0.1-py3-none-any.whl (12 kB)
+Collecting pluggy<2.0,>=0.12
+  Downloading pluggy-1.0.0-py2.py3-none-any.whl (13 kB)
+Collecting iniconfig
+  Downloading iniconfig-1.1.1-py2.py3-none-any.whl (5.0 kB)
+Collecting packaging
+  Downloading packaging-21.3-py3-none-any.whl (40 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.8/40.8 KB 9.5 MB/s eta 0:00:00
+Collecting tomli>=1.0.0
+  Downloading tomli-2.0.1-py3-none-any.whl (12 kB)
+Collecting attrs>=19.2.0
+  Downloading attrs-22.1.0-py2.py3-none-any.whl (58 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58.8/58.8 KB 12.4 MB/s eta 0:00:00
+Collecting click>=8.0.0
+  Downloading click-8.1.3-py3-none-any.whl (96 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 96.6/96.6 KB 20.7 MB/s eta 0:00:00
+Collecting platformdirs>=2
+  Downloading platformdirs-2.5.3-py3-none-any.whl (14 kB)
+Collecting mypy-extensions>=0.4.3
+  Downloading mypy_extensions-0.4.3-py2.py3-none-any.whl (4.5 kB)
+Collecting pathspec>=0.9.0
+  Downloading pathspec-0.10.1-py3-none-any.whl (27 kB)
+Collecting mccabe<0.8.0,>=0.7.0
+  Downloading mccabe-0.7.0-py2.py3-none-any.whl (7.3 kB)
+Collecting pycodestyle<2.10.0,>=2.9.0
+  Downloading pycodestyle-2.9.1-py2.py3-none-any.whl (41 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41.5/41.5 KB 13.5 MB/s eta 0:00:00
+Collecting pyflakes<2.6.0,>=2.5.0
+  Downloading pyflakes-2.5.0-py2.py3-none-any.whl (66 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 66.1/66.1 KB 21.7 MB/s eta 0:00:00
+Requirement already satisfied: django>=3.2 in ./venv/lib/python3.10/site-packages (from model-bakery->-r requirements-tests.txt (line 6)) (4.1)
+Requirement already satisfied: sqlparse>=0.2.2 in ./venv/lib/python3.10/site-packages (from django>=3.2->model-bakery->-r requirements-tests.txt (line 6)) (0.4.3)
+Requirement already satisfied: asgiref<4,>=3.5.2 in ./venv/lib/python3.10/site-packages (from django>=3.2->model-bakery->-r requirements-tests.txt (line 6)) (3.5.2)
+Collecting pyparsing!=3.0.5,>=2.0.2
+  Downloading pyparsing-3.0.9-py3-none-any.whl (98 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 98.3/98.3 KB 19.2 MB/s eta 0:00:00
+Installing collected packages: mypy-extensions, iniconfig, tomli, pyparsing, pyflakes, pycodestyle, pluggy, platformdirs, pathspec, mccabe, isort, exceptiongroup, click, attrs, packaging, model-bakery, flake8, black, pytest, pytest-django
+Successfully installed attrs-22.1.0 black-22.10.0 click-8.1.3 exceptiongroup-1.0.1 flake8-5.0.4 iniconfig-1.1.1 isort-5.10.1 mccabe-0.7.0 model-bakery-1.9.0 mypy-extensions-0.4.3 packaging-21.3 pathspec-0.10.1 platformdirs-2.5.3 pluggy-1.0.0 pycodestyle-2.9.1 pyflakes-2.5.0 pyparsing-3.0.9 pytest-7.2.0 pytest-django-4.5.2 tomli-2.0.1
+WARNING: You are using pip version 22.0.4; however, version 22.3.1 is available.
+You should consider upgrading via the '/app/venv/bin/python3.10 -m pip install --upgrade pip' command.
+DJANGO_SETTINGS_MODULE=main.settings PYTHONPATH=src venv/bin/pytest src/tests
+============================= test session starts ==============================
+platform linux -- Python 3.10.4, pytest-7.2.0, pluggy-1.0.0
+django: settings: main.settings (from env)
+rootdir: /app
+plugins: django-4.5.2
+collected 63 items
+
+src/tests/api/accounts/test_serializers.py ..                            [  3%]
+src/tests/api/accounts/test_views.py ............                        [ 22%]
+src/tests/api/loader/test_views.py .                                     [ 23%]
+src/tests/transaction/test_models.py ................                    [ 49%]
+src/tests/transaction/management/commands/test_loader_command.py .       [ 50%]
+src/tests/transaction/test_loader.py ....                                [ 57%]
+src/tests/api/accounts/test_serializers.py .................             [ 84%]
+src/tests/api/loader/test_serializers.py ....                            [ 90%]
+src/tests/transaction/test_validators.py ......                          [100%]
+
+=============================== warnings summary ===============================
+src/tests/api/accounts/test_views.py: 2 warnings
+src/tests/transaction/test_models.py: 8 warnings
+  /app/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1564: RuntimeWarning: DateTimeField Transaction.created received a naive datetime (2022-01-01 00:00:00) while time zone support is active.
+    warnings.warn(
+
+src/tests/transaction/test_models.py::TestAccount::test_balance[transactions6-2022-1-0]
+src/tests/transaction/test_models.py::TestAccount::test_balance[transactions7-2022-2-3]
+src/tests/transaction/test_models.py::TestAccount::test_balance[transactions8-2022-1-1]
+  /app/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1564: RuntimeWarning: DateTimeField Transaction.created received a naive datetime (2022-02-01 00:00:00) while time zone support is active.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 63 passed, 13 warnings in 0.44s ========================
+```
 
 ## Command line
 You can load a csv file of transactions through a Django command:
@@ -20,7 +122,7 @@ accounts added 203, transactions added 79999
 ### CSV loader - `POST http://localhost:8000/api/loader/`
 you can also upload a csv of transactions through the API:
 ```
-curl -F 'file=@/Users/pablobuenaposadasanchez/Desktop/abacum/sample-data.csv' http://localhost:8000/api/loader/
+curl -F 'file=@/Users/pablobuenaposada/Desktop/abacum/sample-data.csv' http://localhost:8000/api/loader/
 {"accounts":203,"transactions":79999}
 ```
 
@@ -949,3 +1051,4 @@ curl "http://localhost:8000/api/accounts/monthly/68100000/"
    }
 ]
 ```
+

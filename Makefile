@@ -1,3 +1,4 @@
+DOCKER_IMAGE=abacum
 TEST_ENV_VARS:=$(shell cat .env.test | xargs)
 
 venv:
@@ -20,11 +21,20 @@ migrations/check:
 	$(TEST_ENV_VARS) venv/bin/python src/manage.py makemigrations --check --dry-run
 
 migrate:
-	venv/bin/python src/manage.py collectstatic --noinput
+	venv/bin/python src/manage.py migrate
 
 tests: venv
 	venv/bin/pip install -r requirements-tests.txt
 	$(TEST_ENV_VARS) PYTHONPATH=src venv/bin/pytest src/tests
 
-run/local: venv
-	PYTHONPATH=src venv/bin/python src/manage.py runserver
+run/local: venv migrate
+	PYTHONPATH=src venv/bin/python src/manage.py runserver 0.0.0.0:8000
+
+docker/build:
+	docker build --no-cache	--tag=$(DOCKER_IMAGE) .
+
+docker/run:
+	docker run --name $(DOCKER_IMAGE) -d -p 8000:8000 $(DOCKER_IMAGE)
+
+docker/tests:
+	 docker run $(DOCKER_IMAGE) /bin/sh -c 'make tests'
