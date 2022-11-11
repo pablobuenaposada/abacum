@@ -10,8 +10,8 @@ class LoadFileView(generics.CreateAPIView):
     serializer_class = FileUploadInputSerializer
 
     def post(self, request, *args, **kwargs):
-        # serializer = self.get_serializer(data=request.data)
-        # serializer.is_valid(raise_exception=True)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         num_accounts, num_transactions = Loader().load(request.data["file"].file)
         return Response(
             FileUploadOutputSerializer(
