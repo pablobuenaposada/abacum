@@ -3,7 +3,7 @@ FROM python:3.10.4
 WORKDIR /app
 
 COPY src /app/src
-COPY Makefile requirements.txt requirements-tests.txt setup.cfg .env.test /app/
+COPY Makefile requirements.txt requirements-tests.txt setup.cfg .env.test sample-data.csv /app/
 
 RUN make venv
 

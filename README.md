@@ -1,13 +1,14 @@
 # Abacum
 
-## Setup
+## Setup (needs Docker)
 To have the project running you need to execute the following commands:
 ```
 make docker/build
 make docker/run
 ```
+After this the project should be running in a container and the API should be exposed through http://localhost:8000/
 
-## Run the tests
+## Running the tests
 ```
 pablobuenaposadasanchez@Pablos-MacBook-Pro abacum % make docker/tests
 docker run abacum /bin/sh -c 'make tests'
@@ -104,17 +105,13 @@ src/tests/transaction/test_models.py::TestAccount::test_balance[transactions8-20
 ```
 
 ## Command line
-You can load a csv file of transactions through a Django command:
+You can load a csv file of transactions through a Django command,
+for demonstration purposes the sample csv has been added to the Dockerfile so you can test the loader getting inside the container:
 ```
-pablobuenaposadasanchez@Pablos-MacBook-Pro abacum % make venv
-python3.10 -m venv venv
-venv/bin/pip install -r requirements.txt
-Collecting Django==4.1
-  Using cached Django-4.1-py3-none-any.whl (8.1 MB)
-  ...
-pablobuenaposadasanchez@Pablos-MacBook-Pro abacum % source venv/bin/activate
-(venv) pablobuenaposadasanchez@Pablos-MacBook-Pro abacum % python src/manage.py loader sample-data.csv
+pablobuenaposada@Pablos-MacBook-Pro ~ % docker exec -it abacum /bin/sh
+# venv/bin/python src/manage.py loader sample-data.csv
 accounts added 203, transactions added 79999
+#
 ```
 
 ## Endpoints
