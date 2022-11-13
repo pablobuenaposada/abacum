@@ -1,0 +1,3 @@
+LOADER_AMOUNT_COL = "Amount"
+LOADER_DATE_COL = "Date"
+LOADER_ACCOUNT_COL = "Account"

@@ -5,6 +5,8 @@ import pandas as pd
 import pytz
 from django.db import transaction
 
+from transaction.constants import (LOADER_ACCOUNT_COL, LOADER_AMOUNT_COL,
+                                   LOADER_DATE_COL)
 from transaction.models import Account, Transaction
 
 logger = logging.getLogger(__name__)
@@ -21,12 +23,14 @@ class Loader:
         transaction_instances = []
 
         for _, row in row_iter:
-            account = Account(id=row["Account"])
+            account = Account(id=row[LOADER_ACCOUNT_COL])
             account_instances.append(account)
-            unaware_time = datetime.strptime(row["Date"], "%Y-%m-%d")
+            unaware_time = datetime.strptime(row[LOADER_DATE_COL], "%Y-%m-%d")
             aware_time = unaware_time.replace(tzinfo=pytz.UTC)
             transaction_instances.append(
-                Transaction(account=account, amount=row["Amount"], created=aware_time)
+                Transaction(
+                    account=account, amount=row[LOADER_AMOUNT_COL], created=aware_time
+                )
             )
 
         Account.objects.bulk_create(account_instances, ignore_conflicts=True)
